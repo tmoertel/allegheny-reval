@@ -2,7 +2,10 @@
 #
 # Load the data files into a SQLite database for convenient analysis
 
+load() {
 sqlite3 data/reval.db <<EOF
+
+PRAGMA foreign_keys = ON;
 
 CREATE TABLE sds (
     SchoolDesc text PRIMARY KEY NOT NULL
@@ -12,8 +15,7 @@ CREATE TABLE sds (
 );
 
 .separator ,
-.import data/sd_tax_districts.csv sds
-DELETE FROM sds WHERE SchoolDesc = 'SchoolDesc';
+.import $1 sds
 UPDATE sds
   SET Land_Millage_2011 = Bldg_Millage_2011
   WHERE Land_Millage_2011 = '';
@@ -25,21 +27,19 @@ CREATE TABLE muni_tds (
   , Land_Millage_2012 NOT NULL
 );
 
-.import data/muni_tax_districts.csv muni_tds
-DELETE FROM muni_tds WHERE TaxDistrict = 'TaxDistrict';
+.import $2 muni_tds
 UPDATE muni_tds
   SET Land_Millage_2012 = Bldg_Millage_2012
   WHERE Land_Millage_2012 = '';
 
 CREATE TABLE muni_td_wards (
     TaxDistrict NOT NULL REFERENCES muni_tds (TaxDistrict)
-  , Municode NOT NULL
+  , Municode NOT NULL UNIQUE
   , MuniDesc NOT NULL
   , PRIMARY KEY (TaxDistrict, Municode, MuniDesc)
 );
 
-.import data/muni_tax_district_wards.csv muni_td_wards
-DELETE FROM muni_td_wards WHERE TaxDistrict = 'TaxDistrict';
+.import $3 muni_td_wards
 
 
 CREATE TABLE reval (
@@ -53,7 +53,7 @@ CREATE TABLE reval (
   , PropertyZip NOT NULL
   , Municode NOT NULL REFERENCES muni_td_wards(Municode)
   , MuniDesc NOT NULL
-  , SchoolDesc NOT NULL REFERENCES sd_tds(SchoolDesc)
+  , SchoolDesc NOT NULL REFERENCES sds(SchoolDesc)
   , OwnerDesc NOT NULL
   , HomesteadFlag NOT NULL
   , FarmsteadFlag NOT NULL
@@ -83,8 +83,7 @@ CREATE TABLE reval (
 );
 
 .separator |
-.import data/reval_geninfo.psv reval
-DELETE FROM reval WHERE PIN = 'PIN';
+.import $4 reval
 
 
 CREATE VIEW muni_td_reval AS
@@ -133,3 +132,13 @@ GROUP BY
 ;
 
 EOF
+}
+
+
+# the following trick strips the header line from the CSV files we're importing
+
+load                                              \
+  <( tail -n +2 data/sd_tax_districts.csv )        \
+  <( tail -n +2 data/muni_tax_districts.csv )      \
+  <( tail -n +2 data/muni_tax_district_wards.csv ) \
+  <( tail -n +2 data/reval_geninfo.psv )
