@@ -142,3 +142,7 @@ load                                              \
   <( tail -n +2 data/muni_tax_districts.csv )      \
   <( tail -n +2 data/muni_tax_district_wards.csv ) \
   <( tail -n +2 data/reval_geninfo.psv )
+
+
+sqlite3 -init sql/tax_districts.sql data/reval.db ''
+sqlite3 -init sql/property_taxes.sql data/reval.db ''
