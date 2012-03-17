@@ -9,8 +9,8 @@ PRAGMA foreign_keys = ON;
 
 CREATE TABLE sds (
     SchoolDesc text PRIMARY KEY NOT NULL
-  , Bldg_Millage_2011 NOT NULL
-  , Land_Millage_2011 NOT NULL
+  , Bldg_Millage_2011 REAL NOT NULL
+  , Land_Millage_2011 REAL NOT NULL
   , Correx_Name NOT NULL
 );
 
@@ -23,8 +23,8 @@ UPDATE sds
 
 CREATE TABLE muni_tds (
     TaxDistrict text PRIMARY KEY NOT NULL
-  , Bldg_Millage_2012 NOT NULL
-  , Land_Millage_2012 NOT NULL
+  , Bldg_Millage_2012 REAL NOT NULL
+  , Land_Millage_2012 REAL NOT NULL
 );
 
 .import $2 muni_tds
@@ -34,7 +34,7 @@ UPDATE muni_tds
 
 CREATE TABLE muni_td_wards (
     TaxDistrict NOT NULL REFERENCES muni_tds (TaxDistrict)
-  , Municode NOT NULL UNIQUE
+  , Municode INT NOT NULL UNIQUE
   , MuniDesc NOT NULL
   , PRIMARY KEY (TaxDistrict, Municode, MuniDesc)
 );
@@ -51,7 +51,7 @@ CREATE TABLE reval (
   , PropertyCityState NOT NULL
   , PropertyUnit NOT NULL
   , PropertyZip NOT NULL
-  , Municode NOT NULL REFERENCES muni_td_wards(Municode)
+  , Municode INT NOT NULL REFERENCES muni_td_wards(Municode)
   , MuniDesc NOT NULL
   , SchoolDesc NOT NULL REFERENCES sds(SchoolDesc)
   , OwnerDesc NOT NULL
@@ -68,12 +68,12 @@ CREATE TABLE reval (
   , TaxBillFullAddress3 NOT NULL
   , ChangeNoticeAddress NOT NULL
   , ChangeNoticeCityStateZip NOT NULL
-  , Building2012 NOT NULL
-  , Land2012 NOT NULL
-  , Total2012 NOT NULL
-  , Building2013 NOT NULL
-  , Land2013 NOT NULL
-  , Total2013 NOT NULL
+  , Building2012 REAL NOT NULL
+  , Land2012     REAL NOT NULL
+  , Total2012    REAL NOT NULL
+  , Building2013 REAL NOT NULL
+  , Land2013     REAL NOT NULL
+  , Total2013    REAL NOT NULL
   , TaxDesc NOT NULL
   , AgentName NOT NULL
   , StateDesc NOT NULL
@@ -95,9 +95,9 @@ SELECT
   SUM(Building2013) AS Building2013,
   SUM(Land2013)     AS Land2013,
   SUM(Total2013)    AS Total2013,
-  (0.0 + SUM(Building2013)) / SUM(Building2012) AS rel_asm_bldg,
-  (0.0 + SUM(Land2013))     / SUM(Land2012)     AS rel_asm_land,
-  (0.0 + SUM(Total2013))    / SUM(Total2012)    AS rel_asm_total
+  SUM(Building2013) / SUM(Building2012) AS rel_asm_bldg,
+  SUM(Land2013)     / SUM(Land2012)     AS rel_asm_land,
+  SUM(Total2013)    / SUM(Total2012)    AS rel_asm_total
 FROM
   muni_tds NATURAL JOIN
   muni_td_wards JOIN
@@ -119,9 +119,9 @@ SELECT
   SUM(Building2013) AS Building2013,
   SUM(Land2013)     AS Land2013,
   SUM(Total2013)    AS Total2013,
-  (0.0 + SUM(Building2013)) / SUM(Building2012) AS rel_asm_bldg,
-  (0.0 + SUM(Land2013))     / SUM(Land2012)     AS rel_asm_land,
-  (0.0 + SUM(Total2013))    / SUM(Total2012)    AS rel_asm_total
+  SUM(Building2013) / SUM(Building2012) AS rel_asm_bldg,
+  SUM(Land2013)     / SUM(Land2012)     AS rel_asm_land,
+  SUM(Total2013)    / SUM(Total2012)    AS rel_asm_total
 FROM
   sds NATURAL JOIN
   reval
