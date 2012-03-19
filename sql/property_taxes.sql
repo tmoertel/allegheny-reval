@@ -25,7 +25,8 @@ FROM
     (tds.kind = 'Muni' AND tds.name = muni_td_wards.TaxDistrict)
   )
 WHERE
-  TaxDesc = 'Taxable'
+  TaxDesc = 'Taxable' AND
+  Total2013 > 0  /* skip 18 properties assessed < $0, totaling -$182,900 */
 ;
 
 

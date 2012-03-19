@@ -58,7 +58,8 @@ SELECT
 FROM
   reval
 WHERE
-  TaxDesc = 'Taxable'
+  TaxDesc = 'Taxable' AND
+  Total2013 > 0  /* skip 18 properties assessed < $0, totaling -$182,900 */
 ;
 
 INSERT INTO tds
