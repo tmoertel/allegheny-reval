@@ -315,7 +315,7 @@ CREATE TEMPORARY TABLE ucsur_sales_load (
   , SALEDATE          NOT NULL
   , SALEPRICE  REAL   NOT NULL
   , MUNICODE          NOT NULL
-  , MUNDESC           NOT NULL
+  , MUNIDESC          NOT NULL
   , X                 NOT NULL
   , Y                 NOT NULL
   , USECODE           NOT NULL
@@ -345,7 +345,7 @@ CREATE TABLE ucsur_sales (
   , SALEDATE          NOT NULL
   , SALEPRICE  REAL   NOT NULL
   , MUNICODE          NOT NULL
-  , MUNDESC           NOT NULL
+  , MUNIDESC          NOT NULL
   , X                 NOT NULL
   , Y                 NOT NULL
   , USECODE           NOT NULL
@@ -374,7 +374,7 @@ SELECT
   , SALEDATE
   , SALEPRICE
   , MUNICODE
-  , MUNDESC
+  , MUNIDESC
   , X
   , Y
   , USECODE
