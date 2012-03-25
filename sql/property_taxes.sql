@@ -26,7 +26,7 @@ FROM
   )
 WHERE
   TaxDesc = 'Taxable' AND
-  Total2013 > 0  /* skip 18 properties assessed < $0, totaling -$182,900 */
+  Total2013 >= 0  /* skip 18 properties assessed < $0, totaling -$182,900 */
 ;
 
 
