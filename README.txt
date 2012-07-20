@@ -84,14 +84,19 @@ Here's a quick overview of the tables in the database:
   ptx (view)           -- est. total property taxes due for each property
 
 
-BUILDING THE DATABASE
+GETTING A COPY OF THE DATABASE
 
 If you downloaded the Git source-code repository for this project,
 you can build the database from the raw data sources in the project
 by issuing the "make" command from the project's root directory.
 (The process may take several minutes, the time depending on
-your computer and its disk characteristics.)  A quicker strategy
-would be to obtain a compressed copy of the database (about 150 MB).
+your computer and its disk characteristics.)
+
+A quicker strategy would be to obtain a compressed copy of the final
+database (about 130 MB).  You can download a copy from the Downloads
+section of this project's GitHub repository:
+
+    https://github.com/tmoertel/allegheny-reval/downloads
 
 
 EXAMPLES
